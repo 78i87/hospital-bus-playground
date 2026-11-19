@@ -21,17 +21,17 @@ export const Route = createRootRouteWithContext()({
                 content: 'width=device-width, initial-scale=1'
             },
             {
-                title: 'DO app'
+                title: 'The hospital bus after midnight'
             },
             {
                 name: 'description',
-                content: 'A minimal DO app starter'
+                content: 'An interactive timetable story for the Data Observatory'
             }
         ],
         links: [
             {
                 rel: 'icon',
-                href: '/favicon.ico'
+                href: '/favicon.svg'
             },
             { rel: 'stylesheet', href: appCss }
         ]

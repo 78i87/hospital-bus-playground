@@ -1,0 +1,26 @@
+{
+    "eligible": 1079,
+    "areas": 212,
+    "households": 78346,
+    "paired": 187,
+    "boroughs": [
+        {
+            "label": "Southwark",
+            "value": 15487
+        },
+        {
+            "label": "Lambeth",
+            "value": 13208
+        },
+        {
+            "label": "Lewisham",
+            "value": 11877
+        }
+    ],
+    "medianExtraSeconds": 353,
+    "journeyCounts": [57, 67, 36, 27],
+    "medianTransferSeconds": 252,
+    "longestTransferSeconds": 1833,
+    "longestWaitStop": "Goose Green",
+    "firstWaitSeconds": 1743
+}

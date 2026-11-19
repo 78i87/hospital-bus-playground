@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { defineHooks } from 'crossws';
 
+import { validChapter } from '../features/hospital-bus/story';
 import type {
     BusMessage,
     BusSharedState,
@@ -15,7 +16,9 @@ import { isMapCity } from '../lib/realtime/map-cities';
 const busSharedState: BusSharedState = {
     city: 'london',
     zoom: 9,
-    selectedSegmentIndexes: []
+    selectedSegmentIndexes: [],
+    night: false,
+    chapter: 0
 };
 
 const hooks = defineHooks({
@@ -47,6 +50,7 @@ const hooks = defineHooks({
         } catch {
             return;
         }
+        if (payload.type === 'story/chapter' && !validChapter(payload.chapter)) return;
         updateBusSharedState(payload);
 
         // Broadcast to all peers. Each client engine can ignore own echoes via peerId.
@@ -67,6 +71,12 @@ const hooks = defineHooks({
 });
 
 function updateBusSharedState(payload: Partial<BusMessage>) {
+    if (payload.type === 'story/chapter' && validChapter(payload.chapter)) {
+        busSharedState.chapter = payload.chapter;
+        busSharedState.night = payload.night === true;
+        return;
+    }
+
     if (payload.type === 'screen/map-view') {
         const message = payload as Partial<ScreenMapViewMessage>;
         // Preserve last known valid city/zoom for hello-state replay.

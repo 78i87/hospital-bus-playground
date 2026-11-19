@@ -28,6 +28,8 @@ export type BusSharedState = {
     city: MapCity;
     zoom: number;
     selectedSegmentIndexes: number[];
+    chapter: number;
+    night: boolean;
 };
 
 export type ScreenMapViewState = {

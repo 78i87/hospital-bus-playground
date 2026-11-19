@@ -1,0 +1,574 @@
+.night-story,
+.night-wall,
+.night-simulator {
+    color-scheme: light;
+    --paper: #f8f5ec;
+    --ink: #20231f;
+    --red: #a92f25;
+    --muted: #555950;
+    --rule: #c6c4b7;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+html:has(.night-story),
+body:has(.night-story) {
+    background-color: #f8f5ec;
+}
+.night-story {
+    --gutter: clamp(22px, 5.4vw, 105px);
+    --head: clamp(64px, 9svh, 96px);
+    --foot: clamp(50px, 8svh, 85px);
+    --below: var(--foot);
+    --step: max(67svh, 22rem);
+    --centre: calc((100svh + var(--head) - var(--below)) / 2);
+}
+.night-roll {
+    position: relative;
+    padding: max(0px, calc(var(--centre) - var(--step) / 2)) var(--gutter)
+        max(0px, calc(100svh - var(--centre) - var(--step) / 2));
+}
+.night-step {
+    min-height: var(--step);
+    display: flex;
+    align-items: center;
+    scroll-margin-top: max(0px, calc(var(--centre) - var(--step) / 2));
+}
+.poster-heading {
+    width: 47%;
+    padding-block: 1.5rem;
+}
+.night-byline,
+.night-foot {
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    padding-inline: var(--gutter);
+    background: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+.night-byline::after,
+.night-foot::before {
+    content: '';
+    position: absolute;
+    inset-inline: var(--gutter);
+    height: 1px;
+    background: var(--rule);
+}
+.night-byline {
+    top: 0;
+    height: var(--head);
+    font:
+        500 clamp(15px, 1.3vw, 21px)/1.2 Georgia,
+        serif;
+}
+.night-byline::after {
+    bottom: 0;
+}
+.night-foot {
+    bottom: 0;
+    height: var(--foot);
+}
+.night-foot::before {
+    top: 0;
+}
+.poster-title {
+    font:
+        500 clamp(49px, 5.85vw, 113px)/0.99 Georgia,
+        'Times New Roman',
+        serif;
+    letter-spacing: -0.057em;
+    text-wrap: balance;
+}
+.poster-title em {
+    display: block;
+    font-weight: 400;
+    color: var(--red);
+}
+.night-body {
+    max-width: 43ch;
+    margin-top: clamp(15px, 3.2vh, 36px);
+    color: var(--muted);
+    font-size: clamp(16px, 1.37vw, 25px);
+    line-height: 1.58;
+    text-wrap: pretty;
+}
+.night-body:first-child {
+    margin-top: 0;
+    color: var(--ink);
+    font-size: clamp(17px, 1.65vw, 26px);
+}
+.night-body p + p {
+    margin-top: 0.8em;
+}
+.night-body strong {
+    font-weight: 610;
+    color: var(--ink);
+    white-space: nowrap;
+}
+.poster-map {
+    position: fixed;
+    z-index: 1;
+    right: var(--gutter);
+    top: 50%;
+    width: calc((100% - 2 * var(--gutter)) * 0.49);
+    height: clamp(220px, 32vw, 580px);
+    margin-top: calc(clamp(220px, 32vw, 580px) / -2);
+    background: var(--paper);
+    pointer-events: none;
+}
+.route-diagram,
+.night-wall canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.night-foot {
+    justify-content: flex-start;
+}
+.night-scroll,
+.night-cue {
+    letter-spacing: 0.025em;
+    text-transform: none;
+    color: var(--muted);
+}
+.night-scroll {
+    color: var(--red);
+    font:
+        600 11px/1.35 'SFMono-Regular',
+        Consolas,
+        monospace;
+    font-variant-numeric: tabular-nums;
+}
+.night-cue {
+    font:
+        500 11px/1.35 'SFMono-Regular',
+        Consolas,
+        monospace;
+}
+.night-progress {
+    position: relative;
+    width: clamp(60px, 14vw, 160px);
+    height: 3px;
+    background: #cecbbf;
+    border-radius: 2px;
+}
+.night-progress::before {
+    content: '';
+    display: block;
+    width: var(--story-progress, 0%);
+    height: 100%;
+    background: var(--red);
+}
+.night-progress-pin {
+    position: absolute;
+    left: var(--story-progress, 0%);
+    top: 50%;
+    width: 9px;
+    height: 9px;
+    border: 2px solid var(--red);
+    border-radius: 100%;
+    background: var(--paper);
+    transform: translate(-50%, -50%);
+}
+
+.night-transcript {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+.night-evidence {
+    position: relative;
+    z-index: 3;
+    min-height: 100svh;
+    background: var(--paper);
+    padding: clamp(50px, 8vw, 130px) 7vw;
+    border-top: 1px solid var(--rule);
+}
+.night-evidence > div {
+    max-width: 43rem;
+    margin: auto;
+}
+.night-evidence p {
+    line-height: 1.65;
+    margin-top: 1rem;
+    color: var(--muted);
+}
+.night-evidence a {
+    color: var(--red);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+}
+.night-sources {
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.87rem;
+}
+.night-controller .poster-heading {
+    width: 100%;
+    max-width: 40rem;
+    margin-inline: auto;
+}
+.night-wall {
+    position: fixed;
+    inset: 0;
+}
+.night-simulator {
+    padding: clamp(1rem, 3vw, 2.5rem);
+    min-height: 100vh;
+}
+.night-simulator h1 {
+    font:
+        500 clamp(1.55rem, 3vw, 2.2rem)/1.2 Georgia,
+        serif;
+}
+.night-simulator p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin: 0.4rem 0 1rem;
+}
+.night-simulator-workspace {
+    display: grid;
+    grid-template-columns: minmax(12rem, 1fr) minmax(0, 3.6fr);
+    gap: 1rem;
+    align-items: start;
+}
+.night-simulator-wall {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border: 1px solid var(--rule);
+}
+.night-simulator iframe {
+    display: block;
+    width: 100%;
+    border: 0;
+}
+.night-simulator-wall iframe {
+    aspect-ratio: 16 / 9;
+}
+.night-simulator-controller {
+    border: 1px solid var(--rule) !important;
+    height: min(68vh, 33rem);
+}
+@media (max-width: 760px) {
+    .night-story {
+        --gutter: clamp(18px, 5vw, 38px);
+        --below: calc(var(--foot) + clamp(135px, 26svh, 245px));
+        --step: max(48svh, 17rem);
+    }
+    .night-controller {
+        --below: var(--foot);
+        --step: 72svh;
+    }
+    .poster-heading {
+        width: 100%;
+        max-width: 32rem;
+        margin-inline: auto;
+    }
+    .poster-title {
+        font-size: clamp(39px, min(10.8vw, 7.4svh), 67px);
+    }
+    .night-body {
+        margin-top: 15px;
+        font-size: clamp(15px, 4.1vw, 19px);
+        line-height: 1.48;
+    }
+    .poster-map {
+        inset: auto 0 var(--foot);
+        width: 100%;
+        height: calc(var(--below) - var(--foot));
+        padding-inline: var(--gutter);
+        margin: 0;
+    }
+    .poster-map canvas {
+        max-width: 34rem;
+        margin: auto;
+    }
+    .night-simulator-workspace {
+        grid-template-columns: 1fr;
+    }
+    .night-simulator-wall {
+        order: -1;
+    }
+}
+@media (max-height: 550px) {
+    .night-story {
+        --head: 37px;
+        --foot: 33px;
+    }
+    .poster-title {
+        font-size: clamp(23px, 4.2vw, 44px);
+    }
+    .night-body {
+        font-size: 14px;
+        line-height: 1.35;
+        margin-top: 8px;
+    }
+}
+@media (max-height: 500px) and (min-width: 530px) and (max-width: 760px) {
+    .night-story {
+        --below: var(--foot);
+    }
+    .poster-heading {
+        width: 48%;
+        margin-left: 0;
+    }
+    .poster-map {
+        inset: 30% 2% auto auto;
+        width: 46%;
+        height: 42svh;
+        padding: 0;
+    }
+}
+
+.night-impact {
+    position: relative;
+    z-index: 3;
+    background: var(--paper);
+    color: var(--ink);
+    padding: clamp(40px, 7vw, 95px) var(--gutter);
+    border-top: 1px solid var(--rule);
+}
+.impact-inner {
+    max-width: 68rem;
+    margin-inline: auto;
+}
+.night-impact h2 {
+    font:
+        normal clamp(32px, 4.1vw, 60px)/1.08 Georgia,
+        serif;
+    letter-spacing: -0.04em;
+}
+.impact-columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(25px, 5vw, 80px);
+    margin-block: 2rem;
+}
+.night-impact h3 {
+    font-size: 1.17rem;
+    line-height: 1.3;
+    font-weight: 650;
+}
+.night-impact p {
+    margin-top: 0.65rem;
+    color: var(--muted);
+    line-height: 1.55;
+}
+.night-impact strong {
+    color: var(--ink);
+    font-weight: 650;
+}
+.impact-chart {
+    margin: 1.4rem 0 0;
+}
+.impact-chart figcaption {
+    font-size: 0.88rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 1rem;
+}
+.impact-chart li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.3rem 0.8rem;
+    font-size: 0.86rem;
+    font-variant-numeric: tabular-nums;
+    margin-bottom: 0.8rem;
+}
+.impact-track {
+    grid-column: 1 / -1;
+    background: #e6e2d7;
+    height: 0.38rem;
+}
+.impact-track i {
+    display: block;
+    height: 100%;
+    background: var(--red);
+}
+.impact-wait {
+    border-top: 1px solid var(--rule);
+    padding-top: 1.4rem;
+}
+.impact-wait p {
+    max-width: 70ch;
+}
+@media (max-width: 720px) {
+    .impact-columns {
+        grid-template-columns: 1fr;
+    }
+}
+
+.travel-poster {
+    height: min(74svh, 43vw);
+    grid-template-rows: minmax(0, 1fr);
+    top: 50%;
+    margin: 0;
+    transform: translateY(-50%);
+    pointer-events: auto;
+    display: grid;
+    align-items: center;
+}
+.access-map {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 0.55rem;
+    height: 100%;
+    max-height: 45rem;
+    margin: 0;
+}
+.access-map-bar {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 0.5rem;
+}
+.access-map-bar figcaption {
+    font:
+        500 clamp(0.94rem, 1.35vw, 1.3rem)/1.2 Georgia,
+        serif;
+}
+.departure-switch {
+    border: 1px solid #aba99c;
+    border-radius: 2rem;
+    display: inline-flex;
+    padding: 2px;
+    margin: 0;
+    flex: none;
+}
+.departure-switch label {
+    position: relative;
+    cursor: pointer;
+}
+.departure-switch input {
+    position: absolute;
+    opacity: 0;
+}
+.departure-switch span {
+    display: block;
+    padding: 0.45em 0.8em;
+    border-radius: 2rem;
+    font:
+        600 0.8rem/1.3 Arial,
+        sans-serif;
+}
+.departure-switch input:checked + span {
+    background: var(--ink);
+    color: var(--paper);
+}
+.departure-switch input:focus-visible + span {
+    outline: 2px solid #126db3;
+    outline-offset: 2px;
+}
+.access-map-images {
+    display: grid;
+    min-height: 0;
+}
+.access-map-images img {
+    grid-area: 1/1;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    object-fit: contain;
+}
+.access-map-key {
+    display: flex;
+    justify-content: center;
+    gap: 0.35rem 0.72rem;
+    flex-wrap: wrap;
+    list-style: none;
+}
+.access-map-key li {
+    display: flex;
+    align-items: center;
+    gap: 0.28rem;
+    font:
+        500 clamp(0.72rem, 0.9vw, 0.9rem)/1.2 Arial,
+        sans-serif;
+}
+.access-map-key i {
+    width: 0.85em;
+    height: 0.85em;
+}
+.controller-switch {
+    position: fixed;
+    right: var(--gutter);
+    top: calc(var(--head) / 2);
+    transform: translateY(-50%);
+    z-index: 3;
+}
+@media (max-width: 760px) {
+    .travel-poster {
+        inset: auto 0 var(--foot);
+        width: 100%;
+        height: min(35svh, 20rem);
+        transform: none;
+        padding-bottom: 0.45rem;
+    }
+    .access-map {
+        gap: 0.3rem;
+    }
+    .access-map-bar {
+        padding: 0.2rem 0;
+    }
+    .access-map-key {
+        gap: 0.2rem 0.55rem;
+    }
+}
+@media (max-height: 500px) and (min-width: 530px) and (max-width: 760px) {
+    .travel-poster {
+        inset: 16% 2% auto auto;
+        width: 46%;
+        height: 68svh;
+    }
+}
+
+.night-evidence h2 {
+    font:
+        500 2.25rem/1.1 Georgia,
+        serif;
+}
+.night-evidence h3 {
+    margin-top: 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 650;
+}
+.night-evidence h3 + p {
+    margin-top: 0.4rem;
+}
+.wall-notes {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+.wall-notes .night-impact,
+.wall-notes .night-evidence {
+    padding: 20px 32px;
+    min-height: 0;
+    border: 0;
+}
+.wall-notes .night-evidence > div,
+.wall-notes .impact-inner {
+    max-width: none;
+}
+.wall-notes .night-evidence p {
+    margin-top: 0.45rem;
+    line-height: 1.42;
+}
+.wall-notes .night-evidence h3 {
+    margin-top: 1rem;
+}
+.wall-notes .impact-columns {
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+}
