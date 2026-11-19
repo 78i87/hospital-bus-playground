@@ -7,7 +7,7 @@ export const bands = [
     ['#c45642', 'Over 60'],
     ['#d2d0c7', 'No route within 2 hr']
 ] as const;
-export const mapURL = (time: Departure) => `/data/hospital-${time}.png`;
+export const mapURL = (time: Departure) => `${import.meta.env.BASE_URL}data/hospital-${time}.png`;
 
 export function TimeSwitch({
     time,

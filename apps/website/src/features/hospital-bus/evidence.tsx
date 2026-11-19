@@ -11,7 +11,7 @@ export function Evidence() {
                     trauma hospitals on Thursday 19 November 2026. Each trip starts at noon or 2
                     a.m. and can include walking, waiting and up to two buses. Grey means we found
                     no journey within two hours under these rules.{' '}
-                    <a href="/data/hospital-journeys.csv" download>
+                    <a href={`${import.meta.env.BASE_URL}data/hospital-journeys.csv`} download>
                         Download the neighbourhood results (CSV)
                     </a>
                     .

@@ -1,5 +1,7 @@
 # The hospital bus after midnight
 
+**[Open the live demo](https://78i87.github.io/hospital-bus-playground/)** · Scroll through the story on your phone or laptop.
+
 A scroll-led Data Observatory demo built from [Imperial’s Developer Playground](https://github.com/dsi-icl/do-starter-playground). It follows a scheduled 2 a.m. trip to King’s College Hospital and tests what an 87-second hold would change elsewhere on the bus network.
 
 ## Run locally
