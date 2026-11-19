@@ -48,12 +48,13 @@ function drawWall(
     mapImage?: HTMLImageElement
 ) {
     const item = chapters[chapter];
-    const inner = Math.min(w * 0.9, h * 2.65);
+    const panoramic = w / h >= 4;
+    const inner = panoramic ? w * 0.89 : Math.min(w * 0.9, h * 2.65);
     const left = (w - inner) / 2;
     const mapX = left + inner * 0.52;
-    const mapY = h * 0.23,
+    const mapY = h * (panoramic ? 0.14 : 0.23),
         mapW = inner * 0.48,
-        mapH = h * 0.56;
+        mapH = h * (panoramic ? 0.75 : 0.56);
     // Keep the route in place while the words change.
     ctx.fillStyle = palette.paper;
     ctx.fillRect(0, 0, w, mapY);
@@ -68,9 +69,9 @@ function drawWall(
     ctx.fillStyle = palette.rule;
     ctx.fillRect(left, h * 0.11, inner, h * 0.0015);
     const copyWidth = inner * 0.49;
-    let bodyY = h * 0.24;
+    let bodyY = h * (panoramic ? 0.21 : 0.24);
     if (chapter === 0) {
-        const titleSize = Math.min(h * 0.083, inner * 0.042);
+        const titleSize = Math.min(h * (panoramic ? 0.13 : 0.083), inner * 0.042);
         ctx.fillStyle = palette.ink;
         ctx.font = `${titleSize}px Georgia, serif`;
         const y = wrap(ctx, openingTitle.lead, left, h * 0.19, copyWidth, titleSize * 1.04);
@@ -79,7 +80,8 @@ function drawWall(
         bodyY = wrap(ctx, openingTitle.emphasis, left, y, copyWidth, titleSize * 1.04) + h * 0.045;
     }
     ctx.fillStyle = palette.ink;
-    const bodySize = h * (chapter === 0 ? 0.03 : 0.034);
+    const bodySize =
+        h * (panoramic ? (chapter === 0 ? 0.057 : 0.065) : chapter === 0 ? 0.03 : 0.034);
     ctx.font = `${bodySize}px Arial, sans-serif`;
     for (const paragraph of item.paragraphs) {
         bodyY =
@@ -88,7 +90,32 @@ function drawWall(
     if (redrawMap) {
         ctx.save();
         ctx.translate(mapX, mapY);
-        if (chapter < 2) {
+        if (panoramic && chapter < 2) {
+            ctx.fillStyle = palette.paper;
+            ctx.fillRect(0, 0, mapW, mapH);
+            // Keep London's outline proportional. Put the key beside it on the wide wall.
+            const keyX = mapW * 0.56;
+            if (mapImage) {
+                const scale = Math.min(keyX / mapImage.width, mapH / mapImage.height);
+                const imageW = mapImage.width * scale;
+                const imageH = mapImage.height * scale;
+                ctx.drawImage(mapImage, (keyX - imageW) / 2, (mapH - imageH) / 2, imageW, imageH);
+            }
+            ctx.fillStyle = palette.ink;
+            ctx.font = `${h * 0.075}px Georgia, serif`;
+            let y = wrap(ctx, departures[time], keyX, mapH * 0.11, mapW - keyX, h * 0.09);
+            ctx.font = `${h * 0.046}px Arial, sans-serif`;
+            y =
+                wrap(ctx, 'Time to a major trauma hospital', keyX, y, mapW - keyX, h * 0.05) +
+                h * 0.04;
+            for (const [colour, label] of bands) {
+                ctx.fillStyle = colour;
+                ctx.fillRect(keyX, y + h * 0.008, h * 0.03, h * 0.03);
+                ctx.fillStyle = palette.ink;
+                ctx.fillText(label, keyX + h * 0.049, y);
+                y += h * 0.071;
+            }
+        } else if (chapter < 2) {
             ctx.fillStyle = palette.paper;
             ctx.fillRect(0, 0, mapW, mapH);
             ctx.fillStyle = palette.ink;

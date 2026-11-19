@@ -101,9 +101,10 @@ export function drawMap(ctx: Pen, width: number, height: number, scene: MapScene
     ctx.save();
     ctx.fillStyle = palette.paper;
     ctx.fillRect(0, 0, width, height);
-    const u = Math.min(width / (width < 520 ? 26 : 39), height / 9.4);
+    const u = Math.min(width / (width < 520 ? 26 : 39), height / 10.8);
     const x = [width * 0.123, width * 0.5, width * 0.877];
-    const base = height * 0.53;
+    // Leave room above the last stop for the bus on shallow panoramic canvases.
+    const base = Math.max(height * 0.53, u * 6.25);
     const rise = u * 1.08;
     const y = [base + rise, base, base - rise];
     ctx.lineJoin = 'round';

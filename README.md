@@ -11,14 +11,14 @@ corepack pnpm install --frozen-lockfile
 corepack pnpm dev
 ```
 
-Open `http://localhost:5780/` and scroll. The wall simulator is at `http://localhost:5780/simulator`. Scroll inside its controller to move all six screens together.
+Open `http://localhost:5780/` and scroll. The wall simulator is at `http://localhost:5780/simulator`. Scroll inside its controller to move the screens together. Select **View full 16 × 4 wall** or open `http://localhost:5780/simulator?full=true` to preview all 64 panels.
 
 ## Data Observatory routes
 
 - `/` is a self-guided version for a laptop or phone.
 - `/control` is the tablet controller for scrolling and switching map times. When a section becomes active it sends a chapter number to the starter’s WebSocket bus.
-- `/screen?c=0&r=0` renders one tile of the wall. The default wall is 16 columns by 4 rows of 1920 × 1080 screens. Use zero-based `c` and `r`. The local simulator explicitly requests a 3 × 2 layout. Each tile renders only to a canvas the size of its own display.
-- `/simulator` loads the controller and six independent wall tiles in frames. A tile that joins late receives the current chapter through the starter’s initial state message. Keep scrolling after chapter six to show the findings and references on the wall.
+- `/screen?c=0&r=0` renders one tile of the wall. The default wall is 16 columns by 4 rows of 1920 × 1080 screens. Use zero-based `c` and `r`. The simulator offers both 3 × 2 and 16 × 4 layouts. Each tile renders only to a canvas the size of its own display.
+- `/simulator` opens the six-screen preview by default. A tile that joins late receives the current chapter through the starter’s initial state message. Keep scrolling after chapter six to show the findings and references on the wall.
 
 ```sh
 corepack pnpm --filter website build

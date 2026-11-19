@@ -572,3 +572,9 @@ body:has(.night-story) {
     grid-template-columns: 1fr 1fr;
     gap: 2.5rem;
 }
+
+.night-simulator p a {
+    color: var(--red);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+}
