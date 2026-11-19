@@ -1,4 +1,5 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { useState } from 'react';
 
 import '../features/hospital-bus/story.css';
 
@@ -9,41 +10,61 @@ export const Route = createFileRoute('/simulator')({
 
 function Simulator() {
     const { full } = Route.useSearch();
+    const [overview, setOverview] = useState(false);
     const cols = full ? 16 : 3;
     const rows = full ? 4 : 2;
     return (
         <main className="night-simulator">
-            <h1>Data Observatory wall preview</h1>
-            <p>
-                Scroll inside the controller to move the wall. Showing {cols} columns × {rows} rows.{' '}
-                <a href={full ? '/simulator' : '/simulator?full=true'}>
-                    {full ? 'View six-screen preview' : 'View full 16 × 4 wall'}
-                </a>
-            </p>
-            <div className="night-simulator-workspace">
-                <iframe
-                    className="night-simulator-controller"
-                    title="Scroll controller"
-                    src="/control"
-                />
-                <div
-                    className="night-simulator-wall"
-                    style={{ gridTemplateColumns: `repeat(${cols}, minmax(0,1fr))` }}
-                    aria-label={`${cols} by ${rows} wall preview`}
+            <header className="simulator-bar">
+                <h1>Developer Playground</h1>
+                <button
+                    type="button"
+                    aria-expanded={overview}
+                    aria-controls="wall-overview"
+                    onClick={() => setOverview(!overview)}
                 >
-                    {Array.from({ length: cols * rows }, (_, index) => {
-                        const row = Math.floor(index / cols);
-                        const col = index % cols;
-                        return (
-                            <iframe
-                                key={index}
-                                title={`Screen row ${row + 1}, column ${col + 1}`}
-                                src={`/screen?c=${col}&r=${row}&cols=${cols}&rows=${rows}`}
-                            />
-                        );
-                    })}
-                </div>
-            </div>
+                    {overview ? 'Hide' : 'Show'} wall overview
+                </button>
+            </header>
+            <section id="wall-overview" hidden={!overview} aria-label="Wall overview">
+                {overview && (
+                    <>
+                        <div className="simulator-layout">
+                            <span>
+                                {cols} columns × {rows} rows
+                            </span>
+                            <Link to="/simulator" search={{ full: !full }} resetScroll={false}>
+                                {full ? 'View 6 panels' : 'View 64 panels'}
+                            </Link>
+                        </div>
+                        <div
+                            className="night-simulator-wall"
+                            style={{
+                                gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
+                                maxWidth: `min(100%, ${(cols / rows) * (16 / 9) * 28}dvh)`
+                            }}
+                        >
+                            {Array.from({ length: cols * rows }, (_, index) => {
+                                const row = Math.floor(index / cols);
+                                const col = index % cols;
+                                return (
+                                    <iframe
+                                        key={index}
+                                        tabIndex={-1}
+                                        title={`Screen row ${row + 1}, column ${col + 1}`}
+                                        src={`/screen?c=${col}&r=${row}&cols=${cols}&rows=${rows}`}
+                                    />
+                                );
+                            })}
+                        </div>
+                    </>
+                )}
+            </section>
+            <iframe
+                className="night-simulator-controller"
+                title="Scroll controller"
+                src="/control?map=true"
+            />
         </main>
     );
 }

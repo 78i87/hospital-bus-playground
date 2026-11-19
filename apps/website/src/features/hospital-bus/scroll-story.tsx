@@ -21,7 +21,7 @@ const RouteDiagram = memo(function RouteDiagram({ scene }: { scene: MapScene }) 
 
 function Poster({
     chapter,
-    controller,
+    showMap,
     progress,
     time,
     change
@@ -29,23 +29,21 @@ function Poster({
     time: Departure;
     change: (value: Departure) => void;
     chapter: number;
-    controller: boolean;
+    showMap: boolean;
     progress: React.RefObject<HTMLDivElement | null>;
 }) {
     return (
         <>
-            <header className="night-byline">{authorName}</header>
-            {chapter < 2 &&
-                (controller ? (
-                    <div className="controller-switch">
-                        <TimeSwitch time={time} change={change} />
-                    </div>
-                ) : (
-                    <div className="poster-map travel-poster">
-                        <TravelMap time={time} change={change} />
-                    </div>
-                ))}
-            {!controller && chapter >= 2 && (
+            <header className="night-byline">
+                <span>{authorName}</span>
+                {!showMap && chapter < 2 && <TimeSwitch time={time} change={change} />}
+            </header>
+            {showMap && chapter < 2 && (
+                <div className="poster-map travel-poster">
+                    <TravelMap time={time} change={change} />
+                </div>
+            )}
+            {showMap && chapter >= 2 && (
                 <div className="poster-map" role="img" aria-label={chapters[chapter].alt}>
                     <RouteDiagram scene={mapScenes[chapter - 1]} />
                 </div>
@@ -67,7 +65,13 @@ function Poster({
     );
 }
 
-export function ScrollStory({ controller = false }: { controller?: boolean }) {
+export function ScrollStory({
+    controller = false,
+    showMap = !controller
+}: {
+    controller?: boolean;
+    showMap?: boolean;
+}) {
     const [chapter, setChapter] = useState(0);
     const [time, change] = useState<Departure>('day');
     useEffect(() => {
@@ -138,10 +142,7 @@ export function ScrollStory({ controller = false }: { controller?: boolean }) {
     }, [controller]);
 
     return (
-        <main
-            className={`night-story ${controller ? 'night-controller' : ''}`}
-            data-chapter={chapter}
-        >
+        <main className={`night-story ${showMap ? '' : 'night-controller'}`} data-chapter={chapter}>
             <div className="night-transcript" role="status" aria-atomic="true">
                 {chapters[chapter]?.location ??
                     (chapter === findingsView ? 'Findings' : 'Methods and sources')}
@@ -149,7 +150,7 @@ export function ScrollStory({ controller = false }: { controller?: boolean }) {
             <div hidden={chapter >= chapters.length}>
                 <Poster
                     chapter={Math.min(chapter, chapters.length - 1)}
-                    controller={controller}
+                    showMap={showMap}
                     progress={progress}
                     time={time}
                     change={change}

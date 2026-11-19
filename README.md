@@ -11,7 +11,7 @@ corepack pnpm install --frozen-lockfile
 corepack pnpm dev
 ```
 
-Open `http://localhost:5780/` and scroll. The wall simulator is at `http://localhost:5780/simulator`. Scroll inside its controller to move the screens together. Select **View full 16 × 4 wall** or open `http://localhost:5780/simulator?full=true` to preview all 64 panels.
+Open `http://localhost:5780/` and scroll. The wall simulator is at `http://localhost:5780/simulator`. The simulator opens with the readable story and map. Select **Show wall overview** to watch the panels follow your scroll. Select **View 64 panels** or open `http://localhost:5780/simulator?full=true` and open the overview to inspect the 16 × 4 layout.
 
 ## Data Observatory routes
 
